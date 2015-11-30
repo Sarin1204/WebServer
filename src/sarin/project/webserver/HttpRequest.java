@@ -54,10 +54,8 @@ public final class HttpRequest implements Runnable
 		switch(type){
 		
 		case "GET":
-				System.out.println("Inside case Get");
 				Get response = new Get();
 				response = respondWithGet(requestLine);
-				System.out.println("After respondWithGet");
 				os.writeBytes(response.getStatusLine());
 				os.writeBytes(response.getContentTypeLine());
 				os.writeBytes(CRLF);
@@ -75,9 +73,8 @@ public final class HttpRequest implements Runnable
 			while(br.ready()){
 				payload.append((char) br.read());
 				}
-				System.out.println("post payload is "+payload);
+				System.out.println("post payload: "+payload);
 				String[] parameters = payload.toString().split("&");
-				System.out.println("paramters 0 is"+parameters[0]);
 				String firstname = parameters[0].split("=")[1];
 				String lastname = parameters[1].split("=")[1];
 				String statusLine = "HTTP/1.1 200 "+CRLF;
@@ -112,40 +109,40 @@ public final class HttpRequest implements Runnable
 	private static String contentType(String fileName){
 		
 		if(fileName.endsWith(".htm") || fileName.endsWith(".html")){
-			System.out.println("Inside contentType html");
 			return "text/html";
 		}
 		else if(fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")){
-			System.out.println("Inside contentType jpeg");
 			return "image/jpeg";
 		}
 		else if(fileName.endsWith(".gif")){
-			System.out.println("Inside contentType gif");
 			return "image/gif";
 		}
 		else if(fileName.endsWith(".ico")){
-			System.out.println("Inside contentType ico");
 			return "image/x-icon";
 		}
+		else if(fileName.endsWith(".css")){
+			return "text/css";
+		}
+		else if(fileName.endsWith(".map")){
+			return "application/x-navimap";
+		}
+		else if(fileName.endsWith(".mp4")){
+			return "video/mp4";
+		}
 		else{
-			System.out.println("Inside contentType else");
 			return "application/octet-stream";
 		}
 	}
 	
 	public Get respondWithGet(String requestLine){
-			System.out.println("Inside first requestLine" + requestLine);
 			StringTokenizer tokens = new StringTokenizer(requestLine);
 			tokens.nextToken();
 			String fileName = tokens.nextToken();
-			
-			System.out.println("Inside second requestLine");
 			
 			fileName = "." + fileName;
 			System.out.println("Filename is"+fileName);
 			FileInputStream fis = null;
 			boolean fileExists = true;
-			System.out.println("Inside third requestLine");
 			
 			try 
 			{
